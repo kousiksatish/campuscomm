@@ -15,7 +15,7 @@ class UsersTable extends Migration
         //
         Schema::create('Users', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('RollNo');
+            $table->string('Username');
             $table->string('GCM_ID', 500);
             $table->string('AD_ID');
             $table->string('Path');
