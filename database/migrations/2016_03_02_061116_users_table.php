@@ -13,6 +13,16 @@ class UsersTable extends Migration
     public function up()
     {
         //
+        Schema::create('Users', function (Blueprint $table) {
+            $table->increments('id');
+            $table->integer('RollNo');
+            $table->string('GCM_ID', 500);
+            $table->string('AD_ID');
+            $table->string('Path');
+            $table->integer('Active')->default(1);
+            $table->integer('DeviceCount')->default(0);
+            $table->timestamps();
+        });
     }
 
     /**
@@ -23,5 +33,6 @@ class UsersTable extends Migration
     public function down()
     {
         //
+        Schema::drop('Users');
     }
 }
