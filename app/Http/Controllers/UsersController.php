@@ -38,6 +38,20 @@ class UsersController extends Controller
     public function store(Request $request)
     {
         //
+        $username = $request->username;
+        $password = $request->password;
+        $GCM_Id = $request->gcmid;
+        $AD_Id = $request->AD_Id;
+        $shellcmd = "python2 nitt_imap_login.py ".$username." ".$password;
+        $imap = shell_exec($shellcmd);
+        if($imap == 1)
+        {   
+            return response()->json(['status' => '200', 'data' => ['description' => 'Successfully authenticated!']]);
+        }
+        else
+        {
+            return response()->json(['status' => '101', 'data' => ['description' => 'Invalid username or password!']]);
+        }
     }
 
     /**
