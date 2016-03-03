@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
+use App\Messages as Messages;
+
 class MessagesController extends Controller
 {
     /**
@@ -14,11 +16,55 @@ class MessagesController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function fetchNew(Request $request)
     {
         //
+        $latest_msg_id = $request->latest_msg_id;
+
+        if(!$latest_msg_id)
+            return response()->json(['status' => 102, 'data' => ['description' => 'Invalid parameters!']]);
+
+        $messages = Messages::where('id', '>', $latest_msg_id)
+                            ->where('spam',0)
+                            ->get(['id','Message','Sender','tags','view_count', 'created_at']);
+
+        if(sizeof($messages)==0)
+            return response()->json(['status' => 101, 'data' => ['description' => 'No more new messages!']]);
+        return response()->json(['status' => 200, 'data' => ['description' => 'Successfully fetched new messages!', 'no_of_messages' => sizeof($messages), 'messages' => $messages]]);
+
+
+    }
+    public function fetchOld(Request $request)
+    {
+        //
+        $oldest_msg_id = $request->oldest_msg_id;
+        $no_of_messages = $request->no_of_messages;
+
+        if(!$oldest_msg_id || !$no_of_messages)
+            return response()->json(['status' => 102, 'data' => ['description' => 'Invalid parameters!']]);
+
+        $messages = Messages::where('id', '<', $oldest_msg_id)
+                            ->where('spam',0)
+                            ->orderBy('created_at', 'desc')
+                            ->take($no_of_messages)
+                            ->get(['id','Message','Sender','tags','view_count', 'created_at']);
+
+        if(sizeof($messages)==0)
+            return response()->json(['status' => 101, 'data' => ['description' => 'No more messages!']]);
+        return response()->json(['status' => 200, 'data' => ['description' => 'Successfully fetched old messages!', 'no_of_messages' => sizeof($messages), 'messages' => $messages]]);
+
     }
 
+    public function latestID(Request $request)
+    {
+
+        $latestid = Messages::orderBy('id', 'desc')
+                            ->first();
+        if(sizeof($latestid)==0)
+            return response()->json(['status' => 101, 'data' => ['description' => 'No messages in database!']]);
+        return response()->json(['status' => 200, 'data' => ['description' => 'Successful!', 'latest_msg_id' => $latestid->id]]);
+
+    }
     /**
      * Show the form for creating a new resource.
      *
@@ -35,9 +81,10 @@ class MessagesController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function send(Request $request)
     {
         //
+        
     }
 
     /**

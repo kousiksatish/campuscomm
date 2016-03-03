@@ -53,7 +53,7 @@ class UsersController extends Controller
                                 ->where('Ad_ID', $AD_Id)
                                 ->first();
             if ($user_exists)
-                return response()->json(['status' => '200', 'data' => ['description' => 'Successfully authenticated!']]);
+                return response()->json(['status' => 200, 'data' => ['description' => 'Successfully authenticated!', 'token' => 'abcd']]);
             /*(1) Ends withiout adding anything in DB*/
 
             /*(2) Same AdId or Same Device*/
@@ -63,7 +63,7 @@ class UsersController extends Controller
                 $user_device_exists->GCM_Id = $GCM_Id;
                 $user_device_exists->Username = $username;
                 $user_device_exists->save();
-                return response()->json(['status' => '200', 'data' => ['description' => 'Successfully authenticated!']]);
+                return response()->json(['status' => 200, 'data' => ['description' => 'Successfully authenticated!', 'token' => 'abcd']]);
             }
             /*(2) Ends modifying GCM_Id and Username for the devide */
             
@@ -74,11 +74,11 @@ class UsersController extends Controller
             $user->path = "btech/cse/14";
             $user->save();
 
-            return response()->json(['status' => '200', 'data' => ['description' => 'Successfully authenticated!']]);
+            return response()->json(['status' => 200, 'data' => ['description' => 'Successfully authenticated!', 'token' => 'abcd']]);
         }
         else
         {
-            return response()->json(['status' => '101', 'data' => ['description' => 'Invalid username or password!']]);
+            return response()->json(['status' => 101, 'data' => ['description' => 'Invalid username or password!']]);
         }
     }
 
