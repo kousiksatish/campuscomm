@@ -13,6 +13,6 @@ class VerifyCsrfToken extends BaseVerifier
      */
     protected $except = [
         //
-    	'register', 'fetchNew', 'fetchOld', 'latestID'
+    	'register', 'fetchNew', 'fetchOld', 'latestID', 'send'
     ];
 }

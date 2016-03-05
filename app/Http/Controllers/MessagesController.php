@@ -84,7 +84,23 @@ class MessagesController extends Controller
     public function send(Request $request)
     {
         //
-        
+        $message = $request->message;
+        $sender = $request->sender;
+        $tags = $request->tags;
+
+        if(!$message || !$sender || !$tags)
+            return response()->json(['status' => 102, 'data' => ['description' => 'Invalid parameters!']]);
+
+        $msg = new Messages();
+
+        $msg->Message = $message;
+        $msg->Sender = $sender;
+        $msg->tags = $tags;
+        $msg->view_count = 0;
+
+        $msg->save();
+
+        return response()->json(['status' => 200, 'data' => ['description' => 'Successfully sent!']]);
     }
 
     /**
